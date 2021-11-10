@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 // public route
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/verify', [AuthController::class, 'verify']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/phones', [PhoneController::class, 'index']);
 Route::get('/phones/{id}', [PhoneController::class, 'show']);
