@@ -5,6 +5,7 @@ use App\Http\Controllers\PhoneController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +33,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::put('/phones/{id}', [PhoneController::class, 'update']);
     Route::delete('/phones/{id}', [PhoneController::class, 'destory']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::resource('/orders', OrderController::class);
 
 });
 
