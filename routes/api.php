@@ -30,7 +30,8 @@ Route::get('/phones/search/{name}', [PhoneController::class, 'search']);
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('/phones', [PhoneController::class, 'store']);
     Route::put('/phones/{id}', [PhoneController::class, 'update']);
-    Route::delete('/phones/{id}', [PhoneController::class, 'destory']);
+    // Route::delete('/phones/{id}', [PhoneController::class, 'destory']);
+    Route::delete('/phones/{id}', 'PhoneController@destroy')->name('phones.destroy');
     Route::post('/logout', [AuthController::class, 'logout']);
 
 });
