@@ -31,6 +31,8 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::get('/phones', [PhoneController::class, 'index']);
     Route::get('/phones/search/{name}', [PhoneController::class, 'search']);
     Route::delete('/phones/{id}', [PhoneController::class, 'destory']);
+    Route::get('stripe', 'StripePaymentController@stripe');
+    Route::post('stripe', [StripeController::class, 'stripePost'])->name('stripe.post');
     Route::post('/logout', [AuthController::class, 'logout']);
 
 });
