@@ -20,9 +20,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify', [AuthController::class, 'verify']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::get('/phones', [PhoneController::class, 'index']);
-Route::get('/phones/{id}', [PhoneController::class, 'show']);
-Route::get('/phones/search/{name}', [PhoneController::class, 'search']);
 
 // Route::resource('phones', PhoneController::class);
 
@@ -30,6 +27,9 @@ Route::get('/phones/search/{name}', [PhoneController::class, 'search']);
 Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::post('/phones', [PhoneController::class, 'store']);
     Route::put('/phones/{id}', [PhoneController::class, 'update']);
+    Route::get('/phones/{id}', [PhoneController::class, 'show']);
+    Route::get('/phones', [PhoneController::class, 'index']);
+    Route::get('/phones/search/{name}', [PhoneController::class, 'search']);
     Route::delete('/phones/{id}', [PhoneController::class, 'destory']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
