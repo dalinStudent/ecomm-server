@@ -17,4 +17,10 @@ class Order extends Model
         'order_date',
         'order_status',
     ];
+
+    public function phones()
+    {
+        return $this->belongsToMany(Phone::class, 'order_details');
+    }
+
 }

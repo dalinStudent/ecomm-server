@@ -25,6 +25,7 @@ Route::get('/phones', [PhoneController::class, 'index']);
 Route::get('/phones/{id}', [PhoneController::class, 'show']);
 Route::get('/phones/search/{name}', [PhoneController::class, 'search']);
 
+
 // Route::resource('phones', PhoneController::class);
 
 //Protected route
@@ -33,8 +34,16 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::put('/phones/{id}', [PhoneController::class, 'update']);
     Route::delete('/phones/{id}', [PhoneController::class, 'destory']);
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::resource('/orders', OrderController::class);
 
+    Route::get('/orders',[OrderController::class,'index']);
+    Route::post('/orders',[OrderController::class,'store']);
+    // Route::post('/orders',[OrderController::class,'sendMailDetail']);
+    Route::get('/orders/{id}/create',[OrderController::class,'create']);
+    Route::get('/orders/{id}',[OrderController::class,'show']);
+    Route::put('/orders/{id}',[OrderController::class,'update']);
+    Route::delete('/orders/{id}',[OrderController::class,'destroy']);
+    Route::get('/orders/{id}/edit',[OrderController::class,'edit']);
+    // Route::resource('/orders', OrderController::class);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
