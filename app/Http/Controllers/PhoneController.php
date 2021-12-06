@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\Phone;
 use Illuminate\Http\Request;
 
@@ -14,7 +14,13 @@ class PhoneController extends Controller
      */
     public function index()
     {
-        return Phone::all();
+        // return Phone::all();
+        $phone = Phone::all();
+        return response()->json([
+			"success" => true,
+			"message" => "Product Phone List",
+			"data" => $phone
+		]);
     }
 
     /**
@@ -41,7 +47,21 @@ class PhoneController extends Controller
             'price' => 'required',
             'img' => 'required',
         ]);
-        return Phone::create($request->all());
+
+        $user_id = Auth::id();
+        $data = [
+            'user_id' => $user_id,
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'img' => $request->img,
+        ];
+        $phone = phone::create($data);
+        return response()->json([
+			"success" => true,
+			"message" => "phone created successfully.",
+			"data" => $phone
+		]);
     }
 
     /**
@@ -52,7 +72,15 @@ class PhoneController extends Controller
      */
     public function show($id)
     {
-        return Phone::find($id);
+        $phone = Phone::find($id);
+		if (is_null($phone)) {
+			return $this->sendError('Product not found.');
+		}
+		return response()->json([
+			"success" => true,
+			"message" => "Product retrieved successfully.",
+			"data" => $phone
+		]);
     }
 
     /**
@@ -63,7 +91,15 @@ class PhoneController extends Controller
      */
     public function edit($id)
     {
-        //
+        $phone = Phone::find($id);
+		if (is_null($phone)) {
+			return $this->sendError('Product not found.');
+		}
+		return response()->json([
+			"success" => true,
+			"message" => "Product get by id successfully.",
+			"data" => $phone
+		]);
     }
 
     /**
@@ -75,9 +111,27 @@ class PhoneController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'price' => 'required',
+            'img' => 'required',
+        ]);
         $phone = Phone::find($id);
-        $phone->update($request->all());
-        return $phone;
+        $user_id = Auth::id();
+        $data = [
+            'user_id' => $user_id,
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'img' => $request->img,
+        ];
+        $phone->update($data);
+        return response()->json([
+			"success" => true,
+			"message" => "Product updated successfully.",
+			"data" => $data
+		]);
     }
 
     /**
@@ -99,6 +153,10 @@ class PhoneController extends Controller
      */
     public function destroy($id)
     {
-        return Phone::destroy($id);
+        $phone = Phone::find($id);
+		$phone->delete();
+		return response()->json([
+			"message" => "Product deleted successfully."
+		]);
     }
 }
