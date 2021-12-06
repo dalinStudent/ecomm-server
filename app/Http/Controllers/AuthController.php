@@ -52,7 +52,7 @@ class AuthController extends Controller
     {
         $fields = $request->validate([
             'verification_code' => 'required|numeric',
-            'phone_number' => 'required|numeric',
+            'phone_number' => 'numeric',
         ]);
         /* Get credentials from .env */
         $tokenTwilio = getenv("TWILIO_AUTH_TOKEN");
