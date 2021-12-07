@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Twilio\Rest\Client;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(Request $request) {
+    protected function register(Request $request) {
 
         $fields = $request->validate([
             'first_name' => 'required|string',
@@ -50,6 +51,7 @@ class AuthController extends Controller
 
     protected function verify(Request $request)
     {
+        
         $fields = $request->validate([
             'verification_code' => 'required|numeric',
             'phone_number' => 'numeric',
@@ -59,6 +61,7 @@ class AuthController extends Controller
         $twilio_sid = getenv("TWILIO_SID");
         $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
         $twilio = new Client($twilio_sid, $tokenTwilio);
+
         $verification = $twilio->verify->v2->services($twilio_verify_sid)
             ->verificationChecks
             ->create($fields['verification_code'], array('to' => $fields['phone_number']));
