@@ -5,6 +5,7 @@ use App\Http\Controllers\PhoneController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,7 @@ Route::post('/verify', [AuthController::class, 'verify']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/phones', [PhoneController::class, 'index']);
 
+
 // Route::resource('phones', PhoneController::class);
 
 //Protected route
@@ -33,6 +35,15 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     Route::delete('/phones/{id}', [PhoneController::class, 'destory']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
+    Route::get('/orders',[OrderController::class,'index']);
+    Route::post('/orders',[OrderController::class,'store']);
+    // Route::post('/orders',[OrderController::class,'sendMailDetail']);
+    Route::get('/orders/{id}/create',[OrderController::class,'create']);
+    Route::get('/orders/{id}',[OrderController::class,'show']);
+    Route::put('/orders/{id}',[OrderController::class,'update']);
+    Route::delete('/orders/{id}',[OrderController::class,'destroy']);
+    Route::get('/orders/{id}/edit',[OrderController::class,'edit']);
+    // Route::resource('/orders', OrderController::class);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
