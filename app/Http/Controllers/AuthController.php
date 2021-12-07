@@ -46,7 +46,12 @@ class AuthController extends Controller
             'token' => $token
         ];
 
-        return response($response, 201);
+        return response()->json([
+            "success" => true,
+            "statusCode" => 201,
+			"message" => "User created successfully.",
+			"data" => $response
+		]);
     }
 
     protected function verify(Request $request)
@@ -102,6 +107,11 @@ class AuthController extends Controller
             'token' => $token
         ];
 
-        return response($response, 201);
+        return response()->json([
+            "success" => true,
+            "statusCode" => 201,
+			"message" => "Login successfully.",
+			"data" => $response
+		]);
     }
 }
