@@ -19,7 +19,7 @@ class AuthController extends Controller
             'email' => 'required|string|unique:users,email',
             'address' => 'required|string',
             'phone_number' => 'required|numeric|unique:users',
-            'password' => 'required|string|min:8|confirmed'
+            'password' => 'required'
         ]);
 
         $tokenTwilio = getenv("TWILIO_AUTH_TOKEN");
