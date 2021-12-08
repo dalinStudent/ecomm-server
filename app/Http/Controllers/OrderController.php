@@ -7,9 +7,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Order;
 use Carbon\Carbon;
-use App\Mail\OrderMail;
+use App\Mail\OrderEmail;
 use App\Models\Phone;
 use App\Models\OrderDetail;
+use App\Models\User;
 
 class OrderController extends Controller
 {
@@ -72,6 +73,9 @@ class OrderController extends Controller
         $phone = Phone::find(4);
         $order->phones()->attach($phone);
 
+        $email = Auth::user()->email;
+        Mail::to($email)->send(new OrderEmail($email));
+
         return response()->json([
 			"success" => true,
 			"message" => "Order created successfully.",
@@ -79,15 +83,17 @@ class OrderController extends Controller
 		]);
     }
 
-    public function sendMailDetail(){
-        $details = [
-            'title' => 'Mail from ItSolutionStuff.com',
-            'body' => 'This is for testing email using smtp'
-        ];
-        Mail::to('da.duon1997@gmail.com')->send(new OrderMail($details));
-        return dd('subcessfull');
+    // public function sendMail(){
 
-    }
+    
+
+    //         return response()->json([
+    //             "success" => true,
+    //             "statusCode" => 200,
+    //             "message" => "Order created successfully.",
+    //         ]);
+
+    // }
 
     /**
      * Display the specified resource.
