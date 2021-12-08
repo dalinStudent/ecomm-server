@@ -57,9 +57,9 @@ class PhoneController extends Controller
         $user_id = Auth::id();
         $data = [
             'user_id' => $user_id,
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
+            'name' => $request->Input('name'),
+            'description' => $request->Input('description'),
+            'price' => $request->$request->Input('price'),
             'img'=> $upload,
         ];
         
