@@ -31,6 +31,6 @@ class OrderEmail extends Mailable
     {
         return $this
                 ->subject('Thank you for order our product')
-                ->markdown('emails.orders');
+                ->view('mails/email-orders');
     }
 }
