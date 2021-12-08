@@ -7,18 +7,19 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderMail extends Mailable
+class OrderEmail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $details;
+    public $email;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($details)
+    public function __construct($email)
     {
-        $this->details = $details;
+        $this->email = $email;
     }
 
     /**
@@ -28,6 +29,8 @@ class OrderMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Order Confirmation')->view('mails.order-mail');
+        return $this
+                ->subject('Thank you for order our product')
+                ->markdown('emails.orders');
     }
 }
