@@ -51,15 +51,15 @@ class PhoneController extends Controller
         ]);
         $image = $request->file('img');
         $upload = $image->getClientOriginalName();
-        $path = 'image/phones/';
-        $path = move_uploaded_file($image->getPathName(), $path. $upload);
+        $pathurl = 'image/phones/';
+        $path = move_uploaded_file($image->getPathName(), $pathurl. $upload);
 
         $user_id = Auth::id();
         $data = [
             'user_id' => $user_id,
-            'name' => $request->Input('name'),
-            'description' => $request->Input('description'),
-            'price' => $request->$request->Input('price'),
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
             'img'=> $upload,
         ];
         
@@ -124,41 +124,27 @@ class PhoneController extends Controller
             'price' => 'required',
             'img' => 'required|mimes:jpg,jpeg,png,gif',
         ]);
-        $image = $request->file('img');
-        $upload = $image->getClientOriginalName();
-        $path = 'image/phones/';
-        $path = move_uploaded_file($image->getPathName(), $path. $upload);
+       
         $phones = Phone::find($id);
         $user_id = Auth::id();
+        $image = $request->file('img');
+        $upload = $image->getClientOriginalName();
+        $pathurl = 'image/phones/';
+        $path = move_uploaded_file($image->getPathName(), $pathurl. $upload);
+
         $data = [
             'user_id' => $user_id,
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'img' => $upload,
+            'name' => $request->Input('name'),
+            'description' => $request->Input('description'),
+            'price' => $request->Input('price'),
+            'img'=> $upload,
         ];
-        $phones->update($data);
+        $dataphon = $phones->update($data);
         return response()->json([
 			"success" => true,
 			"message" => "Order updated successfully.",
-			"data" => $data
+			"data" => $dataphon
 		]);
-        // $user_id = Auth::id();
-        // $phone = Phone::find($id);
-        // dd($phone);
-        // $data = [
-        //     'user_id' => $user_id,
-        //     'name' => $request->name,
-        //     'description' => $request->description,
-        //     'price' => $request->price,
-        //     'img' => $request->img,
-        // ];
-        // $phone->update($data);
-        // return response()->json([
-		// 	"success" => true,
-		// 	"message" => "Product updated successfully.",
-		// 	"data" => $data
-		// ]);
     }
 
     /**

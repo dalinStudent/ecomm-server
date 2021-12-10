@@ -16,4 +16,9 @@ class Phone extends Model
         'price',
         'img',
     ];
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'order_details');
+    }
 }

@@ -22,7 +22,10 @@ class CreateOrdersTable extends Migration
             $table->date('order_date');
             $table->boolean('order_status');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')
+            $table
+            ->foreign('user_id')
+            ->references('id')
+            ->on('users')
             ->onDelete('cascade');
         });
     }

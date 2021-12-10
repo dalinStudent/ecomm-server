@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Twilio\Rest\Client;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(Request $request) {
+    protected function register(Request $request) {
 
         $fields = $request->validate([
             'first_name' => 'required|string',
@@ -18,7 +19,7 @@ class AuthController extends Controller
             'email' => 'required|string|unique:users,email',
             'address' => 'required|string',
             'phone_number' => 'required|numeric|unique:users',
-            'password' => 'required|string|min:8|confirmed'
+            'password' => 'required'
         ]);
 
         $tokenTwilio = getenv("TWILIO_AUTH_TOKEN");
@@ -45,20 +46,27 @@ class AuthController extends Controller
             'token' => $token
         ];
 
-        return response($response, 201);
+        return response()->json([
+            "success" => true,
+            "statusCode" => 201,
+			"message" => "User created successfully.",
+			"data" => $response
+		]);
     }
 
     protected function verify(Request $request)
     {
+        
         $fields = $request->validate([
             'verification_code' => 'required|numeric',
-            'phone_number' => 'required|numeric',
+            'phone_number' => 'numeric',
         ]);
         /* Get credentials from .env */
         $tokenTwilio = getenv("TWILIO_AUTH_TOKEN");
         $twilio_sid = getenv("TWILIO_SID");
         $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
         $twilio = new Client($twilio_sid, $tokenTwilio);
+
         $verification = $twilio->verify->v2->services($twilio_verify_sid)
             ->verificationChecks
             ->create($fields['verification_code'], array('to' => $fields['phone_number']));
@@ -91,7 +99,7 @@ class AuthController extends Controller
                 'message' => 'Email or password incorrect!'
             ], 401);
         }
-
+        
         $token = $user->createToken('apptoken')->plainTextToken;
         
         $response = [
@@ -99,6 +107,19 @@ class AuthController extends Controller
             'token' => $token
         ];
 
-        return response($response, 201);
+        return response()->json([
+            "success" => true,
+            "statusCode" => 201,
+			"message" => "Login successfully.",
+			"data" => $response
+		]);
+    }
+    public function dashboard()
+    {
+        if(Auth::check()){
+            $user = Auth::user(1);
+            return view('auth.dashboard')->with('user',$user);
+        }
+        return redirect("login")->withErrors('You do not have access!');
     }
 }
