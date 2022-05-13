@@ -19,7 +19,7 @@ use App\Http\Controllers\OrderController;
 */
 // public route
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/verify', [AuthController::class, 'verify']);
+// Route::post('/verify', [AuthController::class, 'verify']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/phones', [PhoneController::class, 'index']);
 

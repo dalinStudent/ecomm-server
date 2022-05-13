@@ -18,24 +18,14 @@ class AuthController extends Controller
             'last_name' => 'required|string',
             'email' => 'required|string|unique:users,email',
             'address' => 'required|string',
-            'phone_number' => 'required|numeric|unique:users',
-            'password' => 'required'
+            'password' => 'required|string'
         ]);
-
-        $tokenTwilio = getenv("TWILIO_AUTH_TOKEN");
-        $twilio_sid = getenv("TWILIO_SID");
-        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
-        $twilio = new Client($twilio_sid, $tokenTwilio);
-        $twilio->verify->v2->services($twilio_verify_sid)
-            ->verifications
-            ->create($fields['phone_number'], "sms");
 
         $user = User::create([
             'first_name' => $fields['first_name'],
             'last_name' => $fields['last_name'],
             'email' => $fields['email'],
             'address' => $fields['address'],
-            'phone_number' => $fields['phone_number'],
             'password' => bcrypt($fields['password'])
         ]);
 
@@ -52,32 +42,6 @@ class AuthController extends Controller
 			"message" => "User created successfully.",
 			"data" => $response
 		]);
-    }
-
-    protected function verify(Request $request)
-    {
-        
-        $fields = $request->validate([
-            'verification_code' => 'required|numeric',
-            'phone_number' => 'numeric',
-        ]);
-        /* Get credentials from .env */
-        $tokenTwilio = getenv("TWILIO_AUTH_TOKEN");
-        $twilio_sid = getenv("TWILIO_SID");
-        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
-        $twilio = new Client($twilio_sid, $tokenTwilio);
-
-        $verification = $twilio->verify->v2->services($twilio_verify_sid)
-            ->verificationChecks
-            ->create($fields['verification_code'], array('to' => $fields['phone_number']));
-        if ($verification->valid) {
-            $user = tap(User::where('phone_number', $fields['phone_number']))->update(['isVerified' => true]);
-            /* Authenticate user */
-            Auth::login($user->first());
-            return [
-                'message' => 'Phone number verified'
-            ];
-        }
     }
 
     public function logout(Request $request ) {

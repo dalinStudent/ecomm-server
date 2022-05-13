@@ -17,12 +17,3 @@ use App\Http\Controllers\OrderController;
 Route::get('/', function () {
     return view('welcome');
 });
-// Route::get('orders',[OrderController::class,'sendMailDetail']);
-// Route::get('send-mail', function () {
-//     $details = [
-//         'title' => 'Mail from ItSolutionStuff.com',
-//         'body' => 'This is for testing email using smtp'
-//     ];
-//     \Mail::to('da.duon1997@gmail.com')->send(new \App\Mail\OrderMail($details));
-//     dd("Email is Sent.");
-//     });
