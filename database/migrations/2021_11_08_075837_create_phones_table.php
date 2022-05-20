@@ -15,16 +15,11 @@ class CreatePhonesTable extends Migration
     {
         Schema::create('phones', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
             $table->string('name')->nullable();
             $table->string('description')->nullable();
             $table->decimal('price', 5, 2)->nullable();
             $table->string('img')->nullable();
             $table->timestamps();
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
         });
     }
 

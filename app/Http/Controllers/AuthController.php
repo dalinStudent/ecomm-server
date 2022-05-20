@@ -44,11 +44,12 @@ class AuthController extends Controller
 		]);
     }
 
-    public function logout(Request $request ) {
+    public function logout() {
         auth()->user()->tokens()->delete();
-        return [
-            'message' => 'Logged out'
-        ];
+        return response()->json ([
+            'status' => 200,
+            'message' => 'You was Logged out successfully!',
+        ]);
     }
 
     public function login(Request $request) {
@@ -76,6 +77,22 @@ class AuthController extends Controller
             "statusCode" => 201,
 			"message" => "Login successfully.",
 			"data" => $response
+		]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $user = User::all();
+        return response()->json([
+			"success" => true,
+            "status" => 200,
+			"message" => "Get all users successfully!",
+			"data" => $user
 		]);
     }
 }

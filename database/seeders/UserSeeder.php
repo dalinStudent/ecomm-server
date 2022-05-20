@@ -16,13 +16,27 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
-            'first_name' => 'admin',
-            'last_name' => 'up',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-            'address' => 'phnom penh',
-            'phone_number' => '+855882051005'
-        ]);
+       $user = [
+            [
+               'first_name'=>'Admin',
+               'last_name'=>'Up',
+               'email'=>'admin@phone.com',
+                'is_admin'=>'1',
+                'address' => 'Phnom Penh',
+               'password'=> bcrypt('12345678'),
+            ],
+            [
+               'first_name'=>'User',
+               'last_name'=>'Normal',
+               'email'=>'user@phone.com',
+                'is_admin'=>'0',
+                'address' => 'Prey Veng',
+               'password'=> bcrypt('12345678'),
+            ],
+        ];
+  
+        foreach ($user as $key => $value) {
+            User::create($value);
+        }
     }
 }
