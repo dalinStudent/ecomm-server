@@ -4,23 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Phone;
 
 class Order extends Model
 {
     use HasFactory;
 
+    protected $table = 'orders';
     protected $fillable = [
         'user_id',
-        'amount',
-        'shiping_address',
-        'order_address',
-        'order_date',
+        'phone_id',
         'order_status',
+        'quantity',
     ];
 
-    public function phones()
+    protected $with = ['phone'];
+    public function phone()
     {
-        return $this->belongsToMany(Phone::class, 'order_details');
+        return $this->belongsTo(Phone::class, 'phone_id', 'id');
     }
 
 }

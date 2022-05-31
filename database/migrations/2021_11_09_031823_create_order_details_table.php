@@ -15,13 +15,21 @@ class CreateOrderDetailsTable extends Migration
     {
         Schema::create('order_details', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('order_id');
-            $table->unsignedBigInteger('phone_id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('phone');
+            $table->string('email');
+            $table->string('address');
+            $table->string('city');
+            $table->string('state');
+            $table->string('zipcode');
+            $table->integer('payment_id')->nullable();
+            $table->string('payment_mode');
+            $table->string('status')->default(0);
+            $table->string('remark');
             $table->timestamps();
-            $table->foreign('order_id')->references('id')->on('orders')
-            ->onDelete('cascade');
-            $table->foreign('phone_id')->references('id')->on('phones')
-            ->onDelete('cascade');
+        
         });
     }
 

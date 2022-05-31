@@ -4,7 +4,7 @@
 <title>Your Email</title>
 </head>
 <body>
-<h1>Dear,</h1> <h3><i>{{$email}}</i></h3>
+<h1>Dear customer,</h1> <h3><i>{{$email}}</i></h3>
 <p>
     We've received your order and will get started on it right away.
 </p>

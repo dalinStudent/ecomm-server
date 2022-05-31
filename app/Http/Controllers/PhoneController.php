@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Phone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use File;
 
 class PhoneController extends Controller
 {
@@ -16,11 +17,11 @@ class PhoneController extends Controller
     public function index()
     {
         $phone = Phone::all();
-        // if ()
+
         return response()->json([
 			"success" => true,
             "status" => 200,
-			"message" => "Product Phone List",
+			"message" => "Phone List",
 			"data" => $phone
 		]);
     }
@@ -44,9 +45,13 @@ class PhoneController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'category_id' => 'required',
             'name' => 'required',
+            'slug' => 'required',
             'description' => 'required',
-            'price' => 'required',
+            'sell_price' => 'required',
+            'original_price' => 'required',
+            'quantity' => 'required',
             'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
@@ -55,21 +60,26 @@ class PhoneController extends Controller
         // $user_id = Auth::id();
         $data = [
             // 'user_id' => $user_id,
+            'category_id' => $request->category_id,
             'name' => $request->name,
+            'slug' => $request->slug,
             'description' => $request->description,
-            'price' => $request->price,
+            'sell_price' => $request->sell_price,
+            'original_price' => $request->original_price,
+            'quantity' => $request->quantity,
             'img' => $request->img,
         ]; 
         
-        $phone = phone::create($data);
+        $phone = Phone::create($data); 
 
-        if ($request->hasfile('img')) {
+        if ($request->hasFile('img')) {
             $file = $request->file('img');
             $extension = $file->getClientOriginalExtension();
-            $filename = time() . "." . $extension; 
-            $file->move('images/', $filename);
-            $phone->img = $filename;
+            $filename = time() .".".$extension; 
+            $file->move('uploads/phone/', $filename);
+            $phone->img = 'uploads/phone/'.$filename;
         }
+        $phone->save();
 
         return response()->json([
 			"success" => true,
@@ -95,7 +105,7 @@ class PhoneController extends Controller
 		} else {
             return response()->json([
                 "success" => true,
-                "message" => "Product retrieved successfully.",
+                "message" => "Phone retrieved successfully.",
                 "data" => $phone
             ]);
         }
@@ -137,8 +147,11 @@ class PhoneController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'slug' => 'required',
             'description' => 'required',
-            'price' => 'required',
+            'sell_price' => 'required',
+            'original_price' => 'required',
+            'quantity' => 'required',
             'img' => 'required',
         ]);
         
@@ -146,12 +159,16 @@ class PhoneController extends Controller
         if($phone) {
             $data = [
                         'name' => $request->name,
+                        'slug' => $request->slug,
                         'description' => $request->description,
-                        'price' => $request->price,
+                        'sell_price' => $request->sell_price,
+                        'original_price' => $request->original_price,
+                        'quantity' => $request->quantity,
                         'img' => $request->img,
                     ];
 
                     $phone->update($data);
+                    
 
                     if ($request->hasfile('img')) 
                     {
@@ -163,9 +180,11 @@ class PhoneController extends Controller
                         $file = $request->file('img');
                         $extension = $file->getClientOriginalExtension();
                         $filename = time() . "." . $extension; 
-                        $file->move('images/', $filename);
-                        $phone->img = $filename;
+                        $file->move('uploads/phone/', $filename);
+                        $phone->img = 'uploads/phone/'.$filename;
                     }
+
+                    $phone->save();
 
                     return response()->json([
                         "success" => true,
@@ -202,9 +221,21 @@ class PhoneController extends Controller
     public function destroy($id)
     {
         $phone = Phone::find($id);
-		$phone->delete();
-		return response()->json([
-			"message" => "Product deleted successfully."
-		]);
+        if ($phone) {
+            $phone->delete();
+            
+            return response()->json([
+                "status" => 200,
+                "message" => "Phone deleted successfully."
+            ]);
+            $phone->save();
+        } else {
+            return response()->json([
+                "status" => 304,
+                "message" => "Delete phone unsuccess!.Please try again"
+            ]);
+        }
+		
     }
+
 }
