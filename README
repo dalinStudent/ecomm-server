@@ -1,0 +1,2 @@
+run command php artisan migrate or php artisan migrate:fresh
+run command php artisan db:seed --class=UserSeeder
