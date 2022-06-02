@@ -15,7 +15,7 @@ class CreateOrderDetailsTable extends Migration
     {
         Schema::create('order_details', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id');
+            $table->integer('user_id');
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone');
@@ -26,8 +26,8 @@ class CreateOrderDetailsTable extends Migration
             $table->string('zipcode');
             $table->integer('payment_id')->nullable();
             $table->string('payment_mode');
-            $table->string('status')->default(0);
-            $table->string('remark');
+            $table->tinyInteger('status')->default(0);
+            $table->string('remark')->nullable();
             $table->timestamps();
         
         });

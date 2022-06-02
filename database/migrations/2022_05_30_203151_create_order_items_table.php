@@ -18,10 +18,10 @@ class CreateOrderItemsTable extends Migration
             $table->integer('order_detail_id');
             $table->integer('phone_id');
             $table->integer('quantity');
-            $table->decimal(5, 2);
+            $table->decimal('price', 5, 2);
             $table->timestamps();
         });
-    }
+    } 
 
     /**
      * Reverse the migrations.
